@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Complete Your Profile — ShopKart{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="sk-card p-4">
+
+            <div class="text-center mb-4">
+                <div style="width:56px;height:56px;background:var(--accent);border-radius:50%;
+                            display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                    <i class="bi bi-person-check" style="font-size:1.5rem;color:var(--ink);"></i>
+                </div>
+                <h2 style="font-family:var(--ff-display);font-weight:300;font-size:1.8rem;">
+                    One last step, <em>{{ user.first_name }}</em>
+                </h2>
+                <p style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">
+                    We just need your phone number to complete your profile.
+                </p>
+            </div>
+
+            {% if error %}
+            <div class="toast-msg error mb-3" style="position:static;animation:none;">
+                <i class="bi bi-exclamation-circle text-danger"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="sk-label">Phone Number</label>
+                    <input type="tel" name="phone" class="sk-input"
+                           placeholder="e.g. 9876543210" maxlength="15" autofocus>
+                </div>
+                <button type="submit" class="btn-primary-sk w-100 justify-content-center mt-2">
+                    <i class="bi bi-arrow-right me-1"></i> Complete Profile
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

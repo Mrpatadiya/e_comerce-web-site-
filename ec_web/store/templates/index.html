@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+
+            <a href="{% url 'homepage' %}" 
+               class="list-group-item list-group-item-action {% if not request.GET.category %}active{% endif %}">
+                All Categories
+            </a>
+
+            {% for category in categories %}
+                <a href="?category={{ category.id }}" 
+                   class="list-group-item list-group-item-action 
+                   {% if request.GET.category == category.id|stringformat:'s' %}active{% endif %}">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="row">
+
+            {% if products %}
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+
+                            <img src="{{ product.image.url }}" 
+                                 class="card-img-top" 
+                                 style="height:200px; object-fit:cover;">
+
+                            <div class="card-body d-flex flex-column">
+
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text text-muted">
+                                    ₹{{ product.price }}
+                                </p>
+
+                                <form method="POST" action="{% url 'index' %}" class="mt-auto">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{ product.id }}">
+
+                                    <button class="btn btn-primary w-100">
+                                        Add to Cart
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No products found.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

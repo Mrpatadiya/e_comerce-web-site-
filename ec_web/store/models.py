@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
@@ -22,7 +21,6 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
-
 
 class Product(models.Model):
     name = models.CharField(max_length=60)
@@ -48,29 +46,27 @@ class Product(models.Model):
             return Product.objects.filter(category=category_id)
         return Product.get_all_products()
 
-
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending',   'Pending'),
-        ('shipped',   'Shipped'),
-        ('delivered', 'Delivered'),
-        ('cancelled', 'Cancelled'),
+        ('pending','Pending'),
+        ('shipped','Shipped'),
+        ('delivered','Delivered'),
+        ('cancelled','Cancelled'),
     ]
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    address  = models.CharField(max_length=200, blank=True)
-    phone    = models.CharField(max_length=15, blank=True)
-    date     = models.DateTimeField(auto_now_add=True)
-    status   = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    address = models.CharField(max_length=200, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
     def __str__(self):
         return f"Order #{self.id} — {self.customer} ({self.status})"
 
-
 class OrderItem(models.Model):
-    order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product  = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    price    = models.DecimalField(max_digits=10, decimal_places=2)  # price snapshot at purchase time
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
@@ -78,3 +74,21 @@ class OrderItem(models.Model):
     @property
     def total(self):
         return self.quantity * self.price
+    
+class Payment(models.Model):
+    STATUS_CHOICES = [
+        ('pending','Pending'),
+        ('completed','Completed'),
+        ('failed','Failed'),
+        ('refunded','Refunded'),
+    ]
+
+    order= models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment')
+    customer= models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='payments')
+    stripe_id= models.CharField(max_length=255, unique=True) 
+    amount= models.DecimalField(max_digits=10, decimal_places=2)
+    status= models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    date= models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment #{self.id} — {self.customer} — ₹{self.amount} — {self.status}"    

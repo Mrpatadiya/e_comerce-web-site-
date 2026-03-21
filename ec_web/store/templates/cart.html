@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="mb-4">🛒 Your Cart</h3>
+
+{% if products %}
+
+<div class="table-responsive">
+    <table class="table table-bordered align-middle text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    <img src="{{ product.image.url }}" width="80" height="80" style="object-fit:cover;">
+                </td>
+                <td>{{ product.name }}</td>
+                <td>₹{{ product.price }}</td>
+                <td>
+                    <div class="d-flex justify-content-center align-items-center gap-2">
+
+                        <form method="POST" action="{% url 'update_cart' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product" value="{{ product.id }}">
+                            <input type="hidden" name="remove" value="1">
+                            <button class="btn btn-danger btn-sm">−</button>
+                        </form>
+
+                        <span>{{ product.cart_quantity }}</span>
+                        <form method="POST" action="{% url 'update_cart' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product" value="{{ product.id }}">
+                            <button class="btn btn-success btn-sm">+</button>
+                        </form>
+                    </div>
+                </td>
+                <td>₹{{ product.total_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="row justify-content-end mt-4">
+    <div class="col-md-4">
+        <div class="card p-3 shadow-sm">
+            <h5 class="text-end mb-3">Total: ₹{{ total }}</h5>
+            <input type="text" name="address"
+                       class="form-control mb-2"
+                       placeholder="Enter Address"
+                       required>
+
+                <input type="text" name="phone"
+                       class="form-control mb-3"
+                       placeholder="Enter Phone Number"
+                       required>
+            <a href="{% url 'payment' %}" class="btn btn-success w-100">
+                Proceed to Payment
+            </a>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+<div class="text-center">
+    <h4>Your cart is empty </h4>
+    <a href="{% url 'homepage' %}" class="btn btn-primary mt-3">
+        Continue Shopping
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="mb-4"> Your Orders</h3>
+
+{% if orders %}
+
+    {% for order in orders %}
+        <div class="card mb-4 shadow-sm">
+
+            <div class="card-header bg-dark text-white d-flex justify-content-between">
+                <span>Order #{{ order.id }}</span>
+                <span>{{ order.date }}</span>
+            </div>
+
+            <div class="card-body">
+
+                <p class="mb-2">
+                    <strong>Address:</strong> {{ order.address }} <br>
+                    <strong>Phone:</strong> {{ order.phone }}
+                </p>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center align-middle">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in order.items.all %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ item.product.image.url }}" 
+                                             width="70" height="70" 
+                                             style="object-fit:cover;">
+                                    </td>
+
+                                    <td>{{ item.product.name }}</td>
+
+                                    <td>₹{{ item.price }}</td>
+
+                                    <td>{{ item.quantity }}</td>
+
+                                    <td>
+                                        ₹{{ item.price|floatformat:2|add:"0" }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    {% endfor %}
+
+{% else %}
+
+<div class="text-center">
+    <h4>No orders yet </h4>
+    <a href="{% url 'homepage' %}" class="btn btn-primary mt-3">
+        Start Shopping
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}
