@@ -1,0 +1,47 @@
+# 🔒 Environment variables (VERY IMPORTANT)
+.env
+
+# 🐍 Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 📦 Virtual environment
+.venv/
+venv/
+env/
+
+# 🧾 Django stuff
+*.log
+*.pot
+*.pyc
+
+# SQLite (if you ever used it)
+db.sqlite3
+
+# Django media & static (optional depending on setup)
+media/
+staticfiles/
+
+# 🗄️ PostgreSQL
+# (Nothing specific needed, because DB is NOT stored in project)
+
+# 🧠 IDE / Editor
+.vscode/
+.idea/
+
+# 💻 OS files
+.DS_Store
+Thumbs.db
+
+# 🧪 Testing / coverage
+.coverage
+htmlcov/
+
+# 🔑 Secret keys / config
+*.pem
+*.key
+
+# 🔄 Migrations (optional - usually KEEP them)
+# migrations/
+# !migrations/__init__.py
