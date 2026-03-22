@@ -54,8 +54,13 @@
 <div class="row justify-content-end mt-4">
     <div class="col-md-4">
         <div class="card p-3 shadow-sm">
-            <h5 class="text-end mb-3">Total: ₹{{ total }}</h5>
-            <input type="text" name="address"
+
+            <form method="POST" action="{% url 'checkout' %}">
+                {% csrf_token %}
+
+                <h5 class="text-end mb-3">Total: ₹{{ total }}</h5>
+
+                <input type="text" name="address"
                        class="form-control mb-2"
                        placeholder="Enter Address"
                        required>
@@ -64,9 +69,12 @@
                        class="form-control mb-3"
                        placeholder="Enter Phone Number"
                        required>
-            <a href="{% url 'payment' %}" class="btn btn-success w-100">
-                Proceed to Payment
-            </a>
+
+                <button type="submit" class="btn btn-success w-100">
+                    Place Order
+                </button>
+            </form>
+
         </div>
     </div>
 </div>
