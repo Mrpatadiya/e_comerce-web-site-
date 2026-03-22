@@ -27,10 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =os.getenv("DEBUG", "False").lower() in ["true", "1", "yes"]
+DEBUG =True
+#os.getenv("DEBUG", "False").lower() in ["true", "1", "yes"]
 
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 # Application definition
 
